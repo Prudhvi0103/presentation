@@ -1,0 +1,179 @@
+Git presentation questions 
+
+Here are **brief explanations** for each of your Git-related (and a few networking-related) questions, with examples where helpful.
+
+1. **Difference between revert and reset**  
+   `git revert` creates a **new commit** that undoes the changes of a previous commit (safe for shared/public branches; history preserved).  
+   `git reset` moves the branch pointer backward (rewrites history; can be dangerous on shared branches).  
+   - Revert: `git revert HEAD~1` → new commit undoing last change.  
+   - Reset: `git reset --hard HEAD~1` → discards last commit completely (use --soft or --mixed to keep changes).
+
+2. **What is cp -p used for?**  
+   `cp -p` copies files while **preserving** attributes like timestamps, ownership, and permissions (same as `cp --preserve`).  
+   Example: `cp -p script.sh /backup/` → copied file keeps original modification time & permissions.
+
+3. **What is git fetch?**  
+   Downloads latest commits, branches, and tags from remote repository to your local repo **without merging** them into your working branch. Safe way to see remote changes first.  
+   Example: `git fetch origin` → updates remote-tracking branches like `origin/main`.
+
+4. **What happens internally when you run git init?**  
+   Creates a new empty Git repository by making a hidden `.git` folder in the current directory. This folder contains:  
+   - objects/ (commits, trees, blobs)  
+   - refs/ (branches, tags)  
+   - HEAD file  
+   - config, description, hooks, info, etc.  
+   Nothing is tracked yet until you `add` and `commit`.
+
+5. **How to change commit message?**  
+   For the **last commit** (not pushed): `git commit --amend` (opens editor) or `git commit --amend -m "New message"`.  
+   For older commits: use interactive rebase `git rebase -i HEAD~n` and change `pick` to `reword`.
+
+6. **How to change last commit ID?**  
+   Any change to a commit (message, files) creates a **new commit hash** (SHA). Use `git commit --amend` (changes files or message) → new ID.  
+   Example: `git commit --amend --no-edit` (just touch files → new hash).
+
+7. **What is commit ID amend?**  
+   Refers to amending the last commit with `git commit --amend`, which creates a **new commit** with a **new ID** (old one is replaced in history). Useful for fixing typos or adding forgotten files.
+
+8. **Difference between git pull and git fetch**  
+   `git fetch` → downloads remote changes (commits/branches) but **does not merge** (safe to review first).  
+   `git pull` → does `fetch` + `merge` (or rebase if configured) automatically into current branch.  
+   Fetch first → review → merge is safer.
+
+9. **Difference between git clone and git fork**  
+   `git clone` → creates a **local copy** of a repo (you can push back if you have permission).  
+   `git fork` → creates your own **copy on GitHub/GitLab** (remote copy under your account; used for contributing via pull requests).  
+   Typical flow: fork → clone your fork → work → push → pull request.
+
+10. **How to resolve merge conflict?**  
+    Git marks conflicts in files with `<<<<<<<`, `=======`, `>>>>>>>`.  
+    Steps:  
+    - Open conflicting files  
+    - Edit to keep desired changes  
+    - `git add <file>`  
+    - `git commit` (or continue rebase/merge)  
+    Use tools like VS Code, Meld, or `git mergetool`.
+
+11. **How to identify last commit ID?**  
+    `git log -1` or `git rev-parse HEAD` → shows the current HEAD commit hash.  
+    Short version: `git log --oneline -1`.
+
+12. **In 100 files need only 40 using Git**  
+    You want to commit or stage only 40 out of 100 changed files.  
+    - Interactive: `git add -p` (stage hunks one by one)  
+    - Selective: `git add file1.js file2.py ...` (list 40 files)  
+    - Or `git add :/` then `git reset` unwanted ones.
+
+13. **Difference between git pull and git push**  
+    `git pull` → fetches remote changes + merges them locally (download + integrate).  
+    `git push` → sends your local commits to remote (upload).  
+    Pull = get updates; push = share your work.
+
+14. **Difference between git clone and git init**  
+    `git init` → creates a **new empty repository** locally (no remote yet).  
+    `git clone <url>` → copies an **existing remote repository** locally (includes history, branches, remote tracking).
+
+15. **After git init what folders are created?**  
+    Only one hidden folder: `.git/`  
+    Inside `.git/`:  
+    - branches/  
+    - hooks/  
+    - info/  
+    - objects/  
+    - refs/  
+    - config, HEAD, description, etc.
+
+16. **What is centralized version control?**  
+    Single central server stores all code/history (e.g., SVN, CVS, old Perforce).  
+    All users commit directly to central repo; requires constant network.  
+    Git is **distributed** — everyone has full copy.
+
+17. **TCP and UDP listening ports**  
+    TCP → connection-oriented (reliable, ordered): HTTP (80), HTTPS (443), SSH (22), FTP (21).  
+    UDP → connectionless (faster, no guarantee): DNS (53), DHCP (67/68), streaming/video.
+
+18. **What is HTTP 503 error?**  
+    Service Unavailable — server is temporarily down or overloaded (maintenance, too many requests).  
+    Client should retry later.
+
+19. **What is a server?**  
+    Computer/program that provides services/resources to clients over network (web server, database server, file server).  
+    Listens on ports, responds to requests (e.g., Apache/Nginx for HTTP).
+
+20. **What is SFTP and its port number?**  
+    SSH File Transfer Protocol — secure file transfer over SSH (encrypted).  
+    Port: **22** (same as SSH).
+
+21. **What is git checkout?**  
+    Switches branches or restores files.  
+    - `git checkout main` → switch to branch  
+    - `git checkout -- file.txt` → discard changes in file  
+    Modern: prefer `git switch` for branches, `git restore` for files.
+
+22. **What are Git Tokens?**  
+    Personal Access Tokens (PATs) — secure alternatives to passwords for Git authentication (GitHub, GitLab, etc.).  
+    Used for `git push`, CI/CD, scripts. Generate in account settings.
+
+23. **What is Pull Request and its process?**  
+    Proposal to merge changes from one branch/fork into another (usually main).  
+    Process: fork → clone → branch → commit → push → create PR → review → merge.
+
+24. **What is Merge Request?**  
+    Same as Pull Request — GitLab term for it (GitHub calls it PR, GitLab calls it MR).
+
+25. **What is git fetch?** (repeated)  
+    Downloads remote changes without merging (see #3).
+
+26. **PRC means**  
+    In Git context — likely typo/misspelling of **PR** = Pull Request (or Merge Request).  
+    (Not standard abbreviation otherwise.)
+
+27. **What happens if you delete .git folder?**  
+    Repository is destroyed. All history, branches, commits, tags are lost forever (locally).  
+    Working files remain, but no version control anymore.
+
+28. **How to install Git in MobaXterm?**  
+    MobaXterm usually includes Git.  
+    If missing: Plugins → Install plugin → search "Git" or use package manager: `apt-get install git` (in Mobaxterm's Cygwin-like env).  
+    Or download from git-scm.com and add to PATH.
+
+29. **How to switch one branch to another?**  
+    `git switch <branch-name>` (modern) or `git checkout <branch-name>`.  
+    Example: `git switch feature/login`.
+
+30. **What is git cherry-pick?**  
+    Applies the changes from **specific commit(s)** to current branch (without merging whole branch).  
+    Example: `git cherry-pick abc1234` → brings that commit's changes as new commit.
+
+31. **How to check deleted logs?**  
+    Use `git reflog` → shows history of HEAD movements (including "lost" commits after reset/rebase).  
+    Recover: `git reset --hard HEAD@{n}` or `git cherry-pick <hash>`.
+
+32. **What is Git fork?**  
+    Creates your own copy of someone else's repository on GitHub/GitLab (under your account).  
+    Used to contribute safely via pull requests.
+
+33. **What is Git reflog?**  
+    Local log of where HEAD and branches pointed recently (commits, checkouts, resets, etc.).  
+    Helps recover "lost" commits. View: `git reflog` (expires after ~90 days).
+
+34. **How do you resolve merge conflict?** (repeated)  
+    See #10 — edit files, resolve markers, `git add`, commit.
+
+35. **How to identify old and new data in conflict?**  
+    In conflict file:  
+    `<<<<<<< HEAD` → your current branch changes  
+    `=======` separator  
+    `>>>>>>> branch-name` → incoming changes  
+    Edit to keep what you want.
+
+36. **How to create a repository?**  
+    - Locally: `git init`  
+    - On GitHub/GitLab: click "New repository" → name → create → then `git remote add origin <url>` and push.
+
+37. **What is soft reset and hard reset?**  
+    `git reset --soft <commit>` → moves branch pointer; keeps changes staged.  
+    `git reset --hard <commit>` → moves pointer + discards all changes in index & working directory (dangerous).  
+    (There's also --mixed: default, unstages changes.)
+
+Let me know if you want deeper examples or clarification on any!
